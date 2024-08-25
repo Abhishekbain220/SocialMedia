@@ -1,0 +1,16 @@
+<%-include("./partials/header")%>
+    <div class=" rounded-[20px] w-[500px] h-[500px] bg-black border-[2px] border-blue-700 absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]">
+        <h1 class="h-[20%] text-white flex font-semibold justify-center items-center text-4xl w-[100%]">Create Post Form</h1>
+    <form class="pt-10 h-[80%]  flex flex-col items-center  gap-10 " action="/createPost" enctype="multipart/form-data" method="post">
+        <input class=" border-[2px]   h-[12%] rounded-[50px] w-[80%] pl-5" type="text" name="title" placeholder="Enter Title" id="">
+        <h1 class=" select text-white font-bold border-[2px] flex justify-center items-center cursor-pointer   h-[12%] rounded-[50px] w-[80%] ">Select Image</h1>
+        <input class=" selectInput hidden border-[2px]   h-[12%] rounded-[50px] w-[80%] pl-5" type="file"  name="postImage" id="">
+        <button class=" pt-3 bg-black pl-[2.5vmax] pr-[2.5vmax] pb-3 text-white border-blue-700 border-[2px] hover:bg-blue-700 hover:text-white  rounded-[50px] font-semibold" >Create</button>
+    </form>
+    </div>
+    <script>
+        document.querySelector(".select").addEventListener("click",(()=>{
+            document.querySelector(".selectInput").click()
+        }))
+    </script>
+    <%-include("./partials/footer")%>

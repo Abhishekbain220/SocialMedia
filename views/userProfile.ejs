@@ -1,0 +1,48 @@
+<%-include("./partials/header")%>
+    <h1 class=" absolute text-4xl text-white left-[50%]   font-bold mt-5 ">User Profiles</h1>
+    
+    
+    <div class=" scrollBar overflow-auto h-[68%] border-t-[2px]  border-t-blue-700 absolute left-[20%] top-[50%]  -translate-y-[50%] rounded-xl bg-black w-[70%] pt-[2%]    flex flex-wrap ">
+
+        <%userPost.post.forEach((elem)=>{%>
+            <div class="   ml-5 mt-[2%] card w-[23%]  mb-5">
+                <div class="flex items-center mb-2">
+                    <img class="w-[7vh] h-[7vh] rounded-full object-cover" src="/images/<%=userPost.profileImage%>"
+                        alt="">
+                    <div class="ml-3 ">
+                        <h1 class="text-xl font-bold text-white" ><%=elem.title%></h1>
+
+                    </div>
+                </div>
+                <img class="w-full rounded-[10px] h-[40vh]  object-cover" src="/images/<%=elem.postImage%>" alt="">
+                <div class="text-2xl flex gap-x-5 text-white mt-1">
+                    <a href="/userLike/<%=elem._id%>/<%=userPost._id%>">
+                        <%if(elem.like.includes(user._id)){%>
+                            <i class="ri-heart-fill"></i>
+                            <%}else{%>
+                                <i class="ri-heart-line"></i>
+                                <%}%>
+                    </a>
+                    <span>
+                        <%=elem.like.length%>
+                    </span>
+
+                    <a href="/UserPostComment/<%=elem._id%>/<%=userPost._id%>">
+                        <i class="ri-chat-3-line"></i>
+                    </a>
+                    <a href="/userShowLikes/<%=elem._id%>/<%=userPost._id%>"><i class="ri-list-view"></i></a>
+                </div>
+            </div>
+
+        <%})%>
+
+
+
+
+
+
+    </div>
+
+
+    
+    <%-include("./partials/footer")%>

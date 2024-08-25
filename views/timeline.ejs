@@ -1,0 +1,42 @@
+<%-include("./partials/header")%>
+    <h1 class=" absolute text-4xl text-white left-[50%]   font-bold mt-5 " >Timeline </h1>
+    
+    
+    <div class=" scrollBar overflow-auto h-[68%] border-t-[2px]  border-t-blue-700 absolute left-[20%] top-[50%]  -translate-y-[50%] rounded-xl bg-black w-[70%] pt-[2%]    flex flex-wrap ">
+
+        <%user.post.forEach((elem)=>{%>
+            <div class="   ml-5 mt-[2%] card w-[23%]  mb-5">
+                <div class="flex items-center mb-2">
+                    <img class="w-[7vh] h-[7vh] rounded-full object-cover" src="/images/<%=user.profileImage%>"
+                        alt="">
+                    <div class="ml-3 ">
+                        <h1 class="text-xl font-bold text-white">
+                            <%=elem.title%>
+                        </h1>
+
+                    </div>
+                </div>
+                <img class="w-full rounded-[10px] h-[40vh]  object-cover" src="/images/<%=elem.postImage%>" alt="">
+                <div class="text-2xl flex gap-x-5 text-white mt-1">
+
+
+                    
+                    <a href="/deletePost/<%=elem._id%>">
+                        <i class="ri-delete-bin-4-line"></i>
+                    </a>
+                    <a href="/postUpdate/<%=elem._id%>">
+                        <i class="ri-image-edit-line"></i>
+                    </a>
+                </div>
+            </div>
+        <%})%>
+
+
+
+
+
+
+
+
+    </div>
+    <%-include("./partials/footer")%>

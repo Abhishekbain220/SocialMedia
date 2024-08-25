@@ -1,0 +1,75 @@
+<%-include("./partials/header")%>
+    
+    <div class=" blur-2xl scrollBar overflow-auto h-[68%] border-t-[2px]  border-t-blue-700 absolute left-[20%] top-[50%]  -translate-y-[50%] rounded-xl bg-black w-[70%] pt-[2%]    flex flex-wrap ">
+
+        <%post.forEach((elem)=>{%>
+            <div class="   ml-5 mt-[2%] card w-[23%]  mb-5">
+                <div class="flex items-center mb-2">
+                    <img class="w-[7vh] h-[7vh] rounded-full object-cover" src="/images/<%=elem.user.profileImage%>"
+                        alt="">
+                    <div class="ml-3 ">
+                        <h1 class="text-xl font-bold text-white">
+                            <%=elem.user.username%>
+                        </h1>
+
+                    </div>
+                </div>
+                <img class="w-full rounded-[10px] h-[40vh]  object-cover" src="/images/<%=elem.postImage%>" alt="">
+                <div class="text-2xl flex gap-x-5 text-white mt-1">
+                    <a href="/like/<%=elem._id%>">
+                        <%if(elem.like.includes(user._id)){%>
+                            <i class="ri-heart-fill"></i>
+                            <%}else{%>
+                                <i class="ri-heart-line"></i>
+                                <%}%>
+                    </a>
+                    <span>
+                        <%=elem.like.length%>
+                    </span>
+
+                    <a href="/postComment/<%=elem._id%>">
+                        <i class="ri-chat-3-line"></i>
+                    </a>
+                </div>
+            </div>
+
+            <%})%>
+
+
+
+
+
+
+    </div>
+    <div class="absolute rounded-[30px] left-[50%] top-[50%] bg-black h-[70%] border-blue-700 border-[2px] w-[30%] -translate-x-[50%]  -translate-y-[50%] ">
+        <div class="box h-[90%] w-[100%]  ">
+            <div class="h-[15%] relative flex justify-center items-center text-white w-[100%] text-2xl font-bold ">Comments
+                <a class="absolute right-[5%] top-[20%]" href="/userProfile/<%=uid%>">
+                    <i class="ri-close-line text-white "></i>
+                </a>
+            </div>
+           <div class=" scrollBar h-[85%] overflow-auto ">
+            <%postcomment.comment.forEach((elem)=>{%>
+                <div class="  h-[15%] relative w-[90%] mt-5 flex  ml-5 ">
+                    <img class="h-[40px] w-[40px] object-cover rounded-full" src="/images/<%=elem.user.profileImage%>" alt="">
+                    <h1 class="font-bold ml-3 text-white" ><%=elem.user.username%></h1>
+                    <p class="absolute left-[12.5%] text-white top-5"><%=elem.postComment%></p>
+                </div>
+            <%})%>
+           </div>
+
+
+            </div>
+        <div class="h-[8%] mt-[1%] pl-2  pr-2 w-[100%] ">
+            <form class="  h-[100%] w-[100%] flex" action="/userPostComment/<%=pid%>/<%=uid%>" method="post">
+                <textarea class=" pl-3 pt-2 h-[100%] rounded-[50px] w-[75%]" name="postComment"
+                    placeholder="Enter Your Comment"></textarea>
+                <button class=" rounded-[50px] h-[100%] w-[25%] bg-black font-bold text-white">Submit</button>
+            </form>
+
+        </div>
+    </div>
+
+
+
+    <%-include("./partials/footer")%>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+</head>
+
+<body class=" h-[100%] w-[100%] bg-black ">
+  <nav class="fixed h-[100%] w-[16%] bg-black flex flex-col gap-6 pt-[7%]  text-[1.1vmax] font-bold pl-4 pr-2">
+
+
+
+    <%if(user){%>
+      <a class=" text-white rounded-[5px]  w-[100%] h-[8%] flex items-center pl-[25%]" href="/profile">Profile</a>
+      <a class=" text-white rounded-[5px]  w-[100%] h-[8%] flex items-center pl-[25%]" href="/logout">logout</a>
+      <a class=" text-white rounded-[5px]  w-[100%] h-[8%] flex items-center pl-[25%]" href="/timeline">Timeline</a>
+      <a class=" text-white rounded-[5px]  w-[100%] h-[8%] flex items-center pl-[25%]"
+        href="/deleteUser">DeleteAccount</a>
+      <a class=" text-white rounded-[5px]  w-[100%] h-[8%] flex items-center pl-[25%]" href="/update">Update User</a>
+      <a class=" text-white rounded-[5px]  w-[100%] h-[8%] flex items-center pl-[25%]" href="/createPost">Create
+        Post</a>
+      <%}else{%>
+        <a class=" text-white text-white rounded-[5px]  w-[100%] h-[8%] flex items-center pl-[25%] " href="/">Home</a>
+        <a class=" text-white rounded-[5px]  w-[100%] h-[8%] flex items-center pl-[25%]" href="/register">Register</a>
+        <a class=" text-white rounded-[5px]  w-[100%] h-[8%] flex items-center pl-[25%]" href="/login">Login</a>
+        <a class=" text-white rounded-[5px]  w-[100%] h-[8%] flex items-center pl-[25%]" href="/forgetEmail">Forget
+          Password</a>
+        <%}%>
+  </nav>

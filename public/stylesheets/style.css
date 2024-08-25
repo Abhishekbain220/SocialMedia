@@ -1,0 +1,19 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  html,body{
+    height: 100%;
+    width: 100%;
+  }
+  nav a:hover{
+    background-color: #1A1A1A;
+  }
+  form input::placeholder{
+    
+    color: black;
+  }
+  .scrollBar::-webkit-scrollbar{
+    display: none;
+  }

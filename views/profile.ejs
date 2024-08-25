@@ -1,0 +1,49 @@
+<%-include("./partials/header")%>
+    <h1 class=" absolute text-4xl text-white left-[50%]   font-bold mt-5 "> Profiles</h1>
+    
+    
+    <div class=" scrollBar overflow-auto h-[68%] border-t-[2px]  border-t-blue-700 absolute left-[20%] top-[50%]  -translate-y-[50%] rounded-xl bg-black w-[70%] pt-[2%]    flex flex-wrap ">
+
+        <%post.forEach((elem)=>{%>
+            <div class="   ml-5 mt-[2%] card w-[23%]  mb-5">
+                <div class="flex items-center mb-2">
+                    <img class="w-[7vh] h-[7vh] rounded-full object-cover" src="/images/<%=elem.user.profileImage%>"
+                        alt="">
+                    <div class="ml-3 ">
+                        <a class="text-xl font-bold text-white" href="/userProfile/<%=elem.user._id%>"><%=elem.user.username%></a>
+
+                    </div>
+                </div>
+                <a href="/onlyPost/<%=elem._id%>"><img class="w-full rounded-[10px] h-[40vh]  object-cover" src="/images/<%=elem.postImage%>" alt=""></a>
+                <div class="text-2xl flex gap-x-5 text-white mt-1">
+                    <a href="/like/<%=elem._id%>">
+                        <%if(elem.like.includes(user._id)){%>
+                            <i class="ri-heart-fill"></i>
+                            <%}else{%>
+                                <i class="ri-heart-line"></i>
+                                <%}%>
+                    </a>
+                    <span>
+                        <%=elem.like.length%>
+                    </span>
+
+                    <a href="/postComment/<%=elem._id%>">
+                        <i class="ri-chat-3-line"></i>
+                        <span><%=elem.comment.length%></span>
+                    </a>
+                    <a href="/showLikes/<%=elem._id%>"><i class="ri-list-view"></i></a>
+                </div>
+            </div>
+
+        <%})%>
+
+
+
+
+
+
+    </div>
+
+
+    
+    <%-include("./partials/footer")%>

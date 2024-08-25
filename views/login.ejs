@@ -1,0 +1,11 @@
+<%-include("./partials/header")%>
+    <div class="rounded-[20px] w-[500px] h-[500px] bg-black border-[2px] border-blue-700 absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]">
+        <h1 class="h-[20%] text-white flex font-semibold justify-center items-center text-4xl w-[100%]">Login Form</h1>
+    <form class="pt-10 h-[80%]  flex flex-col items-center  gap-10 " action="/login" method="post">
+        <input class="border-[2px]   h-[12%] rounded-[50px] w-[80%] pl-5" type="text" name="username" placeholder="Enter Username" id="">
+        <input class="border-[2px]   h-[12%] rounded-[50px] w-[80%] pl-5" type="password" name="password" placeholder="Enter password" id="">
+        <button class=" pt-3 bg-black pl-[2.5vmax] pr-[2.5vmax] pb-3 text-white border-blue-700 border-[2px] hover:bg-blue-700 hover:text-white  rounded-[50px] font-semibold">Login</button>
+    </form>
+    </div>
+    
+    <%-include("./partials/footer")%>
