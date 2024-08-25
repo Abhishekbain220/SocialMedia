@@ -103,16 +103,21 @@ router.get('/postComment/:pid', isLoggedIn,async function (req, res, next) {
 });
 router.post('/postComment/:pid', isLoggedIn,async function (req, res, next) {
   let post=await Post.findById(req.params.pid)
-  let newComment=await  Comment.create({
-    postComment:req.body.postComment,
-    user:req.user._id,
-    post:req.params.pid
-  })
-  await post.comment.push(newComment._id)
+  if(req.body.postComment != ""){
+    let newComment=await  Comment.create({
+      postComment:req.body.postComment,
+      user:req.user._id,
+      post:req.params.pid
+    })
+    await post.comment.push(newComment._id)
   await post.save()
   await newComment.save()
 
   res.redirect(`/postComment/${req.params.pid}`)
+  }else{
+    res.redirect(`/postComment/${req.params.pid}`)
+  }
+  
 });
 
 router.get('/userPostComment/:pid/:uid', isLoggedIn,async function (req, res, next) {
