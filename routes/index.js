@@ -8,15 +8,15 @@ let upload = require("../utils/multer")
 let fs = require("fs")
 let path = require("path")
 let global = path.join(__dirname, "../", "public", "images")
-let Post=require("../models/postSchema")
-let Comment=require("../models/commentSchema")
+let Post = require("../models/postSchema")
+let Comment = require("../models/commentSchema")
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('login', { user:req.user });
+  res.render('login', { user: req.user });
 });
 router.get('/register', function (req, res, next) {
   res.render("register", {
-    user:req.user
+    user: req.user
   })
 });
 router.post('/register', async function (req, res, next) {
@@ -34,7 +34,7 @@ router.post('/register', async function (req, res, next) {
 });
 router.get('/login', function (req, res, next) {
   res.render("login", {
-    user:req.user
+    user: req.user
   })
 });
 router.post('/login', passport.authenticate("local", {
@@ -44,109 +44,104 @@ router.post('/login', passport.authenticate("local", {
 
 });
 
-router.get('/profile', isLoggedIn,async function (req, res, next) {
-  let post=await Post.find().populate("user")
+router.get('/profile', isLoggedIn, async function (req, res, next) {
+  let post = await Post.find().populate("user")
   res.render("profile", {
     post,
-    user:req.user
+    user: req.user
   })
 });
-router.get('/userProfile/:uid', isLoggedIn,async function (req, res, next) {
-  let userPost=await User.findById(req.params.uid).populate("post")
-  res.render("userProfile",{
+router.get('/userProfile/:uid', isLoggedIn, async function (req, res, next) {
+  let userPost = await User.findById(req.params.uid).populate("post")
+  res.render("userProfile", {
     userPost,
-    user:req.user
+    user: req.user
   })
 });
-router.get('/showLikes/:pid', isLoggedIn,async function (req, res, next) {
-  let post=await Post.find().populate("user")
-  let postLikes=await Post.findById(req.params.pid).populate("like")
+router.get('/showLikes/:pid', isLoggedIn, async function (req, res, next) {
+  let post = await Post.find().populate("user")
+  let postLikes = await Post.findById(req.params.pid).populate("like")
   console.log(postLikes.like)
 
-  res.render("showLikes",{
+  res.render("showLikes", {
     post,
-    postLikes:postLikes.like,
-    user:req.user,
-    
-  })
-});
-router.get('/userShowLikes/:pid/:uid', isLoggedIn,async function (req, res, next) {
-  let post=await Post.find().populate("user")
-  let postLikes=await Post.findById(req.params.pid).populate("like")
+    postLikes: postLikes.like,
+    user: req.user,
 
-  res.render("userShowLikes",{
-    post,
-    postLikes:postLikes.like,
-    user:req.user,
-    uid:req.params.uid
-    
   })
 });
-router.get('/postComment/:pid', isLoggedIn,async function (req, res, next) {
-  let {pid}=req.params
-  let post=await Post.find().populate("user")
-  let postcomment=await Post.findById(pid).populate({
-    path:"comment",populate:{path:"user"}
+router.get('/userShowLikes/:pid/:uid', isLoggedIn, async function (req, res, next) {
+  let post = await Post.find().populate("user")
+  let postLikes = await Post.findById(req.params.pid).populate("like")
+
+  res.render("userShowLikes", {
+    post,
+    postLikes: postLikes.like,
+    user: req.user,
+    uid: req.params.uid
+
   })
-  
-  
-  
-  
-  
-  
+});
+router.get('/postComment/:pid', isLoggedIn, async function (req, res, next) {
+  let { pid } = req.params
+  let post = await Post.find().populate("user")
+  let postcomment = await Post.findById(pid).populate({
+    path: "comment", populate: { path: "user" }
+  })
+
+
+
+
+
+
   res.render("postComment", {
     post,
     pid,
-    user:req.user,
+    user: req.user,
     postcomment
   })
 });
-router.post('/postComment/:pid', isLoggedIn,async function (req, res, next) {
-  let post=await Post.findById(req.params.pid)
-  if(req.body.postComment != ""){
-    let newComment=await  Comment.create({
-      postComment:req.body.postComment,
-      user:req.user._id,
-      post:req.params.pid
-    })
-    await post.comment.push(newComment._id)
+router.post('/postComment/:pid', isLoggedIn, async function (req, res, next) {
+  let post = await Post.findById(req.params.pid)
+  let newComment = await Comment.create({
+    postComment: req.body.postComment,
+    user: req.user._id,
+    post: req.params.pid
+  })
+  await post.comment.push(newComment._id)
   await post.save()
   await newComment.save()
 
   res.redirect(`/postComment/${req.params.pid}`)
-  }else{
-    res.redirect(`/postComment/${req.params.pid}`)
-  }
-  
 });
 
-router.get('/userPostComment/:pid/:uid', isLoggedIn,async function (req, res, next) {
-  let {pid}=req.params
-  let post=await Post.find().populate("user")
-  let postcomment=await Post.findById(pid).populate({
-    path:"comment",populate:{path:"user"}
+router.get('/userPostComment/:pid/:uid', isLoggedIn, async function (req, res, next) {
+  let { pid } = req.params
+  let post = await Post.find().populate("user")
+  let postcomment = await Post.findById(pid).populate({
+    path: "comment", populate: { path: "user" }
   })
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   res.render("userPostComment", {
     post,
     pid,
-    user:req.user,
+    user: req.user,
     postcomment,
-    uid:req.params.uid
+    uid: req.params.uid
   })
 });
 
-router.post('/userPostComment/:pid/:uid', isLoggedIn,async function (req, res, next) {
-  let post=await Post.findById(req.params.pid)
-  let newComment=await  Comment.create({
-    postComment:req.body.postComment,
-    user:req.user._id,
-    post:req.params.pid
+router.post('/userPostComment/:pid/:uid', isLoggedIn, async function (req, res, next) {
+  let post = await Post.findById(req.params.pid)
+  let newComment = await Comment.create({
+    postComment: req.body.postComment,
+    user: req.user._id,
+    post: req.params.pid
   })
   await post.comment.push(newComment._id)
   await post.save()
@@ -155,31 +150,31 @@ router.post('/userPostComment/:pid/:uid', isLoggedIn,async function (req, res, n
   res.redirect(`/userPostComment/${req.params.pid}/${req.params.uid}`)
 });
 
-router.get('/like/:pid', isLoggedIn,async function (req, res, next) {
-  let post=await Post.findById(req.params.pid)
-  if(post.like.includes(req.user._id)){
-    post.like=post.like.filter((uid)=>{
-      return(
+router.get('/like/:pid', isLoggedIn, async function (req, res, next) {
+  let post = await Post.findById(req.params.pid)
+  if (post.like.includes(req.user._id)) {
+    post.like = post.like.filter((uid) => {
+      return (
         uid != req.user.id
       )
     })
   }
-  else{
+  else {
     post.like.push(req.user._id)
   }
   await post.save()
   res.redirect("/profile")
 });
-router.get('/userLike/:pid/:uid', isLoggedIn,async function (req, res, next) {
-  let post=await Post.findById(req.params.pid)
-  if(post.like.includes(req.user._id)){
-    post.like=post.like.filter((uid)=>{
-      return(
+router.get('/userLike/:pid/:uid', isLoggedIn, async function (req, res, next) {
+  let post = await Post.findById(req.params.pid)
+  if (post.like.includes(req.user._id)) {
+    post.like = post.like.filter((uid) => {
+      return (
         uid != req.user.id
       )
     })
   }
-  else{
+  else {
     post.like.push(req.user._id)
   }
   await post.save()
@@ -191,61 +186,100 @@ router.get('/update', isLoggedIn, function (req, res, next) {
     user: req.user
   })
 });
-router.get('/timeline', isLoggedIn,async function (req, res, next) {
+router.get('/timeline', isLoggedIn, async function (req, res, next) {
   res.render("timeline", {
-    user:await  req.user.populate("post")
+    user: await req.user.populate("post")
   })
 });
-router.get('/deletePost/:pid', isLoggedIn,async function (req, res, next) {
-  let deletePost=await Post.findById(req.params.pid)
-  deletePost.comment.forEach(async(elem)=>{
+router.get('/deletePost/:pid', isLoggedIn, async function (req, res, next) {
+  let deletePost = await Post.findById(req.params.pid)
+  req.user.post=req.user.post.filter((elem)=>{
+    return(
+      elem != req.params.pid
+    )
+  })
+  await req.user.save()
+  deletePost.comment.forEach(async (elem) => {
     await Comment.findByIdAndDelete(elem)
- })
-  let post=await Post.findByIdAndDelete(req.params.pid)
-  fs.unlinkSync(path.join(global,post.postImage))
-  
- 
-  
-  res.redirect("/timeline")
-  
-
-  
-});
-router.get('/postUpdate/:pid', isLoggedIn,async function (req, res, next) {
-  let post=await Post.findById(req.params.pid)
-  res.render("postUpdate",{
-    post,
-    user:req.user
   })
-  
+  let post = await Post.findByIdAndDelete(req.params.pid)
+  fs.unlinkSync(path.join(global, post.postImage))
 
-  
+
+
+
+
+  res.redirect("/timeline")
+
+
+
+});
+router.get('/postUpdate/:pid', isLoggedIn, async function (req, res, next) {
+  let post = await Post.findById(req.params.pid)
+  res.render("postUpdate", {
+    post,
+    user: req.user
+  })
+
+
+
 });
 router.post('/postUpdate/:pid', isLoggedIn, upload.single("postImage"), async function (req, res, next) {
-  
-  let post=await Post.findByIdAndUpdate(req.params.pid,req.body)
-  if(req.file){
-    fs.unlinkSync(path.join(global,post.postImage))
-    post.postImage=req.file.filename
+
+  let post = await Post.findByIdAndUpdate(req.params.pid, req.body)
+  if (req.file) {
+    fs.unlinkSync(path.join(global, post.postImage))
+    post.postImage = req.file.filename
   }
   await post.save()
   res.redirect("/timeline")
-  
+
 });
 router.get('/deleteUser', isLoggedIn, async function (req, res, next) {
-  let user=await User.findByIdAndDelete(req.user._id).populate("post")
-  if(user.post){
-    user.post.forEach(async(elem)=>{
+  let arrayCom = await Comment.findOneAndDelete({
+    user: req.user._id
+  })
+
+  let post = await Post.find()
+  console.log(arrayCom._id)
+
+  post.forEach( (elem) => {
+
+    if (elem.comment.includes(arrayCom._id)) {
+       elem.comment = elem.comment.filter((cid) => {
+        return(
+          cid != arrayCom.id
+        )
+      })
+
+    }
+    if (elem.like.includes(req.user._id)) {
+       elem.like = elem.like.filter((cid) => {
+        return(
+          cid != req.user.id
+        )
+      })
+
+    }    
+    elem.save()
+
+  })
+  
+  let user = await User.findByIdAndDelete(req.user._id).populate("post")
+
+
+  if (user.post) {
+    user.post.forEach(async (elem) => {
       await elem.deleteOne()
-      fs.unlinkSync(path.join(global,elem.postImage))
+      fs.unlinkSync(path.join(global, elem.postImage))
     })
   }
-  
-  if(user.profileImage != "default.jpg"){
-    fs.unlinkSync(path.join(global,user.profileImage))
+
+  if (user.profileImage != "default.jpg") {
+    fs.unlinkSync(path.join(global, user.profileImage))
   }
   res.redirect("/login")
-  
+
 });
 router.post('/update/:id', isLoggedIn, async function (req, res, next) {
   await User.findByIdAndUpdate(req.params.id, req.body)
@@ -267,7 +301,7 @@ router.post('/resetPassword/:id', isLoggedIn, async function (req, res, next) {
 });
 router.get('/forgetEmail', async function (req, res, next) {
   res.render("forgetEmail", {
-    user:req.user
+    user: req.user
   })
 });
 router.post('/forgetEmail', async function (req, res, next) {
@@ -282,7 +316,7 @@ router.post('/forgetEmail', async function (req, res, next) {
 router.get('/forgetPassword/:id', async function (req, res, next) {
   res.render("forgetPassword", {
     id: req.params.id,
-    user:req.user
+    user: req.user
   })
 });
 router.post('/forgetPassword/:id', async function (req, res, next) {
@@ -291,12 +325,12 @@ router.post('/forgetPassword/:id', async function (req, res, next) {
   await user.save()
   res.redirect("/login")
 });
-router.post('/profileImage',upload.single("profileImage"),isLoggedIn, async function (req, res, next) {
+router.post('/profileImage', upload.single("profileImage"), isLoggedIn, async function (req, res, next) {
   try {
     if (req.user.profileImage !== "default.jpg") {
-       fs.unlinkSync(path.join(global,req.user.profileImage))
+      fs.unlinkSync(path.join(global, req.user.profileImage))
     }
-    req.user.profileImage=req.file.filename
+    req.user.profileImage = req.file.filename
     await req.user.save()
     res.redirect("/update")
   } catch (err) {
@@ -309,29 +343,29 @@ router.post('/forgetPassword/:id', async function (req, res, next) {
   await user.save()
   res.redirect("/login")
 });
-router.get('/createPost',isLoggedIn, async function (req, res, next) {
-  res.render("createPost",{
-    user:req.user
+router.get('/createPost', isLoggedIn, async function (req, res, next) {
+  res.render("createPost", {
+    user: req.user
   })
 });
-router.post('/createPost',upload.single("postImage"),isLoggedIn, async function (req, res, next) {
-  let newPost=await Post.create({
-    title:req.body.title,
-    postImage:req.file.filename,
-    user:req.user._id
+router.post('/createPost', upload.single("postImage"), isLoggedIn, async function (req, res, next) {
+  let newPost = await Post.create({
+    title: req.body.title,
+    postImage: req.file.filename,
+    user: req.user._id
   })
   await req.user.post.push(newPost)
   await req.user.save()
   await newPost.save()
   res.redirect("/profile")
 });
-router.get('/onlyPost/:pid',upload.single("postImage"),isLoggedIn, async function (req, res, next) {
-  let post=await Post.findById(req.params.pid)
-  let allPost=await Post.find()
-  
-  res.render("onlyPost",{
+router.get('/onlyPost/:pid', upload.single("postImage"), isLoggedIn, async function (req, res, next) {
+  let post = await Post.findById(req.params.pid)
+  let allPost = await Post.find()
+
+  res.render("onlyPost", {
     post,
-    user:req.user,
+    user: req.user,
     allPost,
   })
 });
