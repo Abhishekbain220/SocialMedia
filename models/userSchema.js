@@ -8,7 +8,8 @@ let userSchama=mongoose.Schema({
         type:String,
         default:"default.jpg"
     },
-    post:[{type:mongoose.Schema.Types.ObjectId,ref:"post"}]
+    post:[{type:mongoose.Schema.Types.ObjectId,ref:"post"}],
+    comment:[{type:mongoose.Schema.Types.ObjectId,ref:"comment"}]
 },{timestamps:true})
 userSchama.plugin(plm)
 module.exports=mongoose.model("user",userSchama)

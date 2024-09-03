@@ -109,6 +109,8 @@ router.post('/postComment/:pid', isLoggedIn, async function (req, res, next) {
     post: req.params.pid
   })
   await post.comment.push(newComment._id)
+  await req.user.comment.push(newComment._id)
+  await req.user.save()
   await post.save()
   await newComment.save()
 
@@ -193,8 +195,8 @@ router.get('/timeline', isLoggedIn, async function (req, res, next) {
 });
 router.get('/deletePost/:pid', isLoggedIn, async function (req, res, next) {
   let deletePost = await Post.findById(req.params.pid)
-  req.user.post=req.user.post.filter((elem)=>{
-    return(
+  req.user.post = req.user.post.filter((elem) => {
+    return (
       elem != req.params.pid
     )
   })
@@ -236,35 +238,32 @@ router.post('/postUpdate/:pid', isLoggedIn, upload.single("postImage"), async fu
 
 });
 router.get('/deleteUser', isLoggedIn, async function (req, res, next) {
-  let arrayCom = await Comment.findOneAndDelete({
-    user: req.user._id
-  })
+  // Check if the user has comments to delete
+  if (req.user.comment.length != 0) {
+    // Delete the user's comment
+    let arrayCom = await Comment.findOneAndDelete({ user: req.user._id });
 
-  let post = await Post.find()
-  console.log(arrayCom._id)
-
-  post.forEach( (elem) => {
-
-    if (elem.comment.includes(arrayCom._id)) {
-       elem.comment = elem.comment.filter((cid) => {
-        return(
-          cid != arrayCom.id
-        )
-      })
-
+    // Fetch all posts and filter out deleted comments
+    let posts = await Post.find();
+    for (let post of posts) {
+      // Remove the deleted comment's ID from the post's comments
+      post.comment = post.comment.filter((cid) => cid != arrayCom.id);
+      
+      // Save the modified post
+      await post.save();
     }
-    if (elem.like.includes(req.user._id)) {
-       elem.like = elem.like.filter((cid) => {
-        return(
-          cid != req.user.id
-        )
-      })
+  }
 
-    }    
-    elem.save()
+  // Remove the user's likes from posts
+  let posts = await Post.find();
+  for (let post of posts) {
+    // Filter out likes matching req.user.id
+    post.like = post.like.filter((cid) => cid != req.user.id);
+    
+    // Save the modified post
+    await post.save();
+  }
 
-  })
-  
   let user = await User.findByIdAndDelete(req.user._id).populate("post")
 
 
@@ -281,10 +280,12 @@ router.get('/deleteUser', isLoggedIn, async function (req, res, next) {
   res.redirect("/login")
 
 });
+
 router.post('/update/:id', isLoggedIn, async function (req, res, next) {
   await User.findByIdAndUpdate(req.params.id, req.body)
   res.redirect("/profile")
 });
+
 router.get('/resetPassword', isLoggedIn, async function (req, res, next) {
   res.render("resetPassword", {
     user: req.user
